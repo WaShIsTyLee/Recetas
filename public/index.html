@@ -17,7 +17,7 @@
     <div class="login-usuarios">
       <button class="btn-usuario juan" onclick="seleccionarUsuario('Juan')">
         <span class="icono material-symbols-outlined">person</span>
-        <span class="usuario-nombre">Juan</span>
+        <span class="usuario-nombre">Juan y Maria</span>
       </button>
       <button class="btn-usuario mama" onclick="seleccionarUsuario('Mama')">
         <span class="icono material-symbols-outlined">person</span>
@@ -224,7 +224,7 @@ function seleccionarUsuario(nombre) {
   document.getElementById('pantalla-login').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('header-nombre-usuario').textContent = nombre;
-  document.getElementById('header-emoji-usuario').textContent = nombre === 'Juan y Maria' ? 'person' : 'person_outline';
+  document.getElementById('header-emoji-usuario').textContent = nombre === 'Juan' ? 'person' : 'person_outline';
   cargarRecetas();
   cargarCategorias();
 }
