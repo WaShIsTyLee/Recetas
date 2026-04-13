@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis Recetas 🍳</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+<!-- =============================================
+     PANTALLA DE BIENVENIDA / SELECCIÓN USUARIO
+============================================== -->
+<div id="pantalla-login">
+  <div class="login-card">
+    <span class="login-icono">🍳</span>
+    <h1>Mis Recetas</h1>
+    <p class="login-subtitulo">¿Quién va a cocinar hoy?</p>
+    <div class="login-usuarios">
+      <button class="btn-usuario juan" onclick="seleccionarUsuario('Juan')">
+        <span class="usuario-emoji">👨‍🍳</span>
+        <span class="usuario-nombre">Juan</span>
+      </button>
+      <button class="btn-usuario mama" onclick="seleccionarUsuario('Mama')">
+        <span class="usuario-emoji">👩‍🍳</span>
+        <span class="usuario-nombre">Mamá</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     APP PRINCIPAL
+============================================== -->
+<div id="app">
+
+  <!-- Header -->
+  <header>
+    <div class="header-logo">🍳 Mis Recetas</div>
+    <div class="header-usuario">
+      <span id="header-emoji-usuario">👤</span>
+      <span id="header-nombre-usuario">Usuario</span>
+    </div>
+    <div class="header-buscador">
+      <span class="icono-busca">🔍</span>
+      <input type="text" id="input-busqueda" placeholder="Buscar receta, ingrediente…" oninput="buscarRecetas()" />
+    </div>
+    <div class="header-acciones">
+      <button class="btn-nueva-receta" onclick="abrirModalNueva()">
+        ＋ Nueva receta
+      </button>
+      <button class="btn-salir" onclick="cerrarSesion()">Salir</button>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <div class="contenido-principal">
+
+    <!-- Sidebar -->
+    <aside>
+      <span class="sidebar-titulo">Mis recetas</span>
+      <button class="sidebar-item activo" id="filtro-todas" onclick="aplicarFiltro('todas')">
+        <span class="icono">📋</span> Todas
+      </button>
+      <button class="sidebar-item" id="filtro-favoritas" onclick="aplicarFiltro('favoritas')">
+        <span class="icono">❤️</span> Favoritas
+      </button>
+
+      <span class="sidebar-titulo" style="margin-top:1rem;">Categorías</span>
+      <div id="sidebar-categorias"></div>
+    </aside>
+
+    <!-- Main -->
+    <main>
+      <div class="main-header">
+        <h2 id="titulo-seccion">Todas las recetas</h2>
+        <span class="contador-recetas" id="contador">0 recetas</span>
+      </div>
+      <div class="grid-recetas" id="grid-recetas">
+        <div class="vacio">
+          <span class="vacio-emoji">🥘</span>
+          <h3>Aún no hay recetas</h3>
+          <p>Pulsa "Nueva receta" para empezar tu libro de cocina</p>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<!-- =============================================
+     MODAL: CREAR / EDITAR RECETA
+============================================== -->
+<div class="modal-overlay" id="modal-form">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-titulo" id="modal-form-titulo">Nueva Receta</span>
+      <button class="btn-cerrar-modal" onclick="cerrarModalForm()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-grid">
+
+        <!-- Foto portada -->
+        <div class="form-grupo form-full">
+          <label>📸 Foto de la receta</label>
+          <div class="zona-foto" id="zona-foto" onclick="document.getElementById('input-foto').click()">
+            <input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" />
+            <span class="foto-placeholder">🖼️</span>
+            <span class="foto-texto">Haz clic para elegir una foto</span>
+          </div>
+        </div>
+
+        <!-- Info básica -->
+        <h3 class="seccion-titulo form-full">📝 Información básica</h3>
+
+        <div class="form-grupo form-full">
+          <label>Nombre de la receta *</label>
+          <input type="text" id="f-nombre" placeholder="Ej: Tortilla española de Mamá" />
+        </div>
+
+        <div class="form-grupo form-full">
+          <label>Descripción breve</label>
+          <textarea id="f-descripcion" placeholder="Un plato delicioso que..." rows="2"></textarea>
+        </div>
+
+        <div class="form-grupo">
+          <label>Categoría</label>
+          <input type="text" id="f-categoria" placeholder="Ej: Postres, Ensaladas…" list="lista-categorias" />
+          <datalist id="lista-categorias">
+            <option value="Desayuno">
+            <option value="Entrante">
+            <option value="Ensalada">
+            <option value="Sopa">
+            <option value="Verduras">
+            <option value="Pasta">
+            <option value="Arroz">
+            <option value="Carne">
+            <option value="Pescado">
+            <option value="Legumbres">
+            <option value="Postre">
+            <option value="Pan y Repostería">
+            <option value="Bebidas">
+            <option value="Tapas">
+          </datalist>
+        </div>
+
+        <div class="form-grupo">
+          <label>Dificultad</label>
+          <select id="f-dificultad">
+            <option value="">Selecciona…</option>
+            <option value="Fácil">🟢 Fácil</option>
+            <option value="Media">🟡 Media</option>
+            <option value="Difícil">🔴 Difícil</option>
+          </select>
+        </div>
+
+        <div class="form-grupo">
+          <label>⏱ Tiempo preparación (min)</label>
+          <input type="number" id="f-tiempo-prep" placeholder="15" min="0" />
+        </div>
+
+        <div class="form-grupo">
+          <label>🔥 Tiempo cocción (min)</label>
+          <input type="number" id="f-tiempo-coccion" placeholder="30" min="0" />
+        </div>
+
+        <div class="form-grupo">
+          <label>🍽 Porciones / raciones</label>
+          <input type="number" id="f-porciones" placeholder="4" min="1" />
+        </div>
+
+        <!-- Ingredientes -->
+        <h3 class="seccion-titulo form-full">🛒 Ingredientes</h3>
+
+        <div class="form-grupo form-full">
+          <div class="lista-editable" id="lista-ingredientes"></div>
+          <button class="btn-agregar" onclick="agregarIngrediente()">＋ Añadir ingrediente</button>
+        </div>
+
+        <!-- Pasos -->
+        <h3 class="seccion-titulo form-full">📋 Pasos de elaboración</h3>
+
+        <div class="form-grupo form-full">
+          <div class="lista-editable" id="lista-pasos"></div>
+          <button class="btn-agregar" onclick="agregarPaso()">＋ Añadir paso</button>
+        </div>
+
+        <!-- Audio -->
+        <h3 class="seccion-titulo form-full">🎙 Notas de voz</h3>
+
+        <div class="form-grupo form-full">
+          <div class="zona-audio">
+            <div class="audio-controles">
+              <button class="btn-audio btn-grabar" id="btn-grabar" onclick="toggleGrabacion()">
+                🎙 Grabar audio
+              </button>
+              <span class="estado-grabacion" id="estado-grabacion"></span>
+            </div>
+            <div class="audio-player" id="audio-player-form">
+              <audio id="audio-preview" controls></audio>
+              <button class="btn-rm-audio" onclick="quitarAudio()">✕ Quitar audio</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notas -->
+        <h3 class="seccion-titulo form-full">💡 Notas y trucos</h3>
+
+        <div class="form-grupo form-full">
+          <textarea id="f-notas" placeholder="Consejos, variaciones, secretos de la receta…" rows="3"></textarea>
+        </div>
+
+        <!-- Etiquetas -->
+        <div class="form-grupo form-full">
+          <label>🏷 Etiquetas (separadas por coma)</label>
+          <input type="text" id="f-etiquetas" placeholder="Ej: sin gluten, verano, rápida…" />
+        </div>
+
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="cerrarModalForm()">Cancelar</button>
+      <button class="btn-guardar" onclick="guardarReceta()">💾 Guardar receta</button>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     MODAL: VER RECETA
+============================================== -->
+<div class="modal-overlay" id="modal-ver">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-titulo">Receta</span>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <button class="btn-mini edit" id="btn-editar-desde-ver" onclick="editarDesdeVer()" title="Editar">✏️</button>
+        <button class="btn-cerrar-modal" onclick="cerrarModalVer()">✕</button>
+      </div>
+    </div>
+
+    <div id="contenido-ver-receta"></div>
+  </div>
+</div>
+
+<!-- =============================================
+     DIÁLOGO CONFIRMAR BORRADO
+============================================== -->
+<div class="modal-overlay" id="dialogo-borrar">
+  <div class="dialogo-mini">
+    <div class="emoji">🗑️</div>
+    <h3>¿Borrar esta receta?</h3>
+    <p>Esta acción no se puede deshacer.</p>
+    <div class="dialogo-btns">
+      <button class="btn-cancelar" onclick="cerrarDialogoBorrar()">Cancelar</button>
+      <button class="btn-borrar-confirm" onclick="confirmarBorrar()">Sí, borrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- =============================================
+     JAVASCRIPT
+============================================== -->
+<script>
+// =======================
+// ESTADO GLOBAL
+// =======================
+let usuarioActual = '';
+let recetaEditandoId = null;
+let recetaViendoId = null;
+let recetaBorrarId = null;
+let recetas = [];
+let filtroActual = 'todas';
+let mediaRecorder = null;
+let audioChunks = [];
+let audioBlob = null;
+let audioURL = null;
+let fotoBase64 = null;
+let fotoExt = null;
+let fotoActualPath = '';
+let audioActualPath = '';
+let grabando = false;
+
+const API = 'http://localhost:5000/api';
+
+// =======================
+// SELECCIÓN DE USUARIO
+// =======================
+function seleccionarUsuario(nombre) {
+  usuarioActual = nombre;
+  document.getElementById('pantalla-login').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('header-nombre-usuario').textContent = nombre;
+  document.getElementById('header-emoji-usuario').textContent = nombre === 'Juan' ? '👨‍🍳' : '👩‍🍳';
+  cargarRecetas();
+  cargarCategorias();
+}
+
+function cerrarSesion() {
+  usuarioActual = '';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('pantalla-login').style.display = 'flex';
+  limpiarFiltros();
+}
+
+// =======================
+// CARGAR RECETAS
+// =======================
+async function cargarRecetas(params = {}) {
+  params.usuario = usuarioActual;
+  const qs = new URLSearchParams(params).toString();
+  try {
+    const r = await fetch(`${API}/recetas?${qs}`);
+    recetas = await r.json();
+    renderizarGrid(recetas);
+    actualizarContador(recetas.length);
+  } catch(e) {
+    mostrarToast('❌ No se pudo conectar con el servidor', 'error');
+  }
+}
+
+async function cargarCategorias() {
+  try {
+    const r = await fetch(`${API}/categorias?usuario=${usuarioActual}`);
+    const cats = await r.json();
+    const sidebar = document.getElementById('sidebar-categorias');
+    sidebar.innerHTML = '';
+    cats.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'sidebar-item';
+      btn.id = `filtro-cat-${cat}`;
+      btn.onclick = () => aplicarFiltro('categoria', cat);
+      btn.innerHTML = `<span class="icono">${iconoCategoria(cat)}</span> ${cat}`;
+      sidebar.appendChild(btn);
+    });
+  } catch(e) {}
+}
+
+function iconoCategoria(cat) {
+  const mapa = {
+    'Desayuno':'🌅','Entrante':'🥗','Ensalada':'🥬','Sopa':'🍲',
+    'Verduras':'🥦','Pasta':'🍝','Arroz':'🍚','Carne':'🥩',
+    'Pescado':'🐟','Legumbres':'🫘','Postre':'🍮','Pan y Repostería':'🍞',
+    'Bebidas':'🥤','Tapas':'🫒'
+  };
+  return mapa[cat] || '🍽';
+}
+
+function renderizarGrid(lista) {
+  const grid = document.getElementById('grid-recetas');
+  if (!lista || lista.length === 0) {
+    grid.innerHTML = `
+      <div class="vacio">
+        <span class="vacio-emoji">🥘</span>
+        <h3>Nada por aquí</h3>
+        <p>Prueba con otra búsqueda o crea una nueva receta</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = lista.map(r => {
+    const total = (parseInt(r.tiempo_prep)||0) + (parseInt(r.tiempo_coccion)||0);
+    const tiempoStr = total ? `⏱ ${total} min` : '';
+    const porcionStr = r.porciones ? `🍽 ${r.porciones}` : '';
+    const difStr = r.dificultad ? `${r.dificultad}` : '';
+    const fotoHtml = r.foto_path
+      ? `<div class="tarjeta-foto"><img src="${r.foto_path.replace('uploads/', '/uploads/')}" alt="foto" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:3rem>${iconoCategoria(r.categoria)}</span>'"/></div>`
+      : `<div class="tarjeta-foto"><span>${iconoCategoria(r.categoria)}</span></div>`;
+
+    return `
+    <div class="tarjeta-receta" onclick="verReceta(${r.id})">
+      ${fotoHtml}
+      <div class="tarjeta-acciones">
+        <button class="btn-mini fav ${r.favorito ? 'activo' : ''}" onclick="event.stopPropagation(); toggleFav(${r.id})" title="Favorito">
+          ${r.favorito ? '❤️' : '🤍'}
+        </button>
+        <button class="btn-mini edit" onclick="event.stopPropagation(); abrirModalEditar(${r.id})" title="Editar">✏️</button>
+        <button class="btn-mini del" onclick="event.stopPropagation(); pedirBorrar(${r.id})" title="Borrar">🗑</button>
+      </div>
+      <div class="tarjeta-cuerpo">
+        <div class="tarjeta-categoria">${r.categoria || 'Sin categoría'}</div>
+        <div class="tarjeta-nombre">${r.nombre}</div>
+        <div class="tarjeta-meta">
+          ${tiempoStr ? `<span>${tiempoStr}</span>` : ''}
+          ${porcionStr ? `<span>${porcionStr}</span>` : ''}
+          ${difStr ? `<span>${difStr}</span>` : ''}
+          ${r.audio_path ? `<span>🎙 Audio</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function actualizarContador(n) {
+  document.getElementById('contador').textContent = `${n} receta${n !== 1 ? 's' : ''}`;
+}
+
+// =======================
+// FILTROS
+// =======================
+function aplicarFiltro(tipo, valor) {
+  filtroActual = tipo;
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('activo'));
+
+  const params = {};
+  if (tipo === 'todas') {
+    document.getElementById('filtro-todas').classList.add('activo');
+    document.getElementById('titulo-seccion').textContent = 'Todas las recetas';
+  } else if (tipo === 'favoritas') {
+    document.getElementById('filtro-favoritas').classList.add('activo');
+    params.favorito = '1';
+    document.getElementById('titulo-seccion').textContent = '❤️ Favoritas';
+  } else if (tipo === 'categoria') {
+    const btn = document.getElementById(`filtro-cat-${valor}`);
+    if(btn) btn.classList.add('activo');
+    params.categoria = valor;
+    document.getElementById('titulo-seccion').textContent = `${iconoCategoria(valor)} ${valor}`;
+  }
+  cargarRecetas(params);
+}
+
+function buscarRecetas() {
+  const q = document.getElementById('input-busqueda').value.trim();
+  const params = {};
+  if(q) params.busqueda = q;
+  if(filtroActual === 'favoritas') params.favorito = '1';
+  cargarRecetas(params);
+}
+
+function limpiarFiltros() {
+  document.getElementById('input-busqueda').value = '';
+  filtroActual = 'todas';
+}
+
+// =======================
+// MODAL FORMULARIO
+// =======================
+function abrirModalNueva() {
+  recetaEditandoId = null;
+  fotoBase64 = null; fotoExt = null; fotoActualPath = ''; audioActualPath = '';
+  audioBlob = null; audioURL = null;
+  document.getElementById('modal-form-titulo').textContent = 'Nueva Receta';
+  limpiarFormulario();
+  document.getElementById('modal-form').classList.add('abierto');
+}
+
+async function abrirModalEditar(id) {
+  recetaEditandoId = id;
+  fotoBase64 = null; fotoExt = null;
+  try {
+    const r = await fetch(`${API}/recetas/${id}`);
+    const rec = await r.json();
+    rellenarFormulario(rec);
+    document.getElementById('modal-form-titulo').textContent = 'Editar Receta';
+    document.getElementById('modal-form').classList.add('abierto');
+  } catch(e) {
+    mostrarToast('❌ Error al cargar la receta', 'error');
+  }
+}
+
+function cerrarModalForm() {
+  document.getElementById('modal-form').classList.remove('abierto');
+  if(grabando) pararGrabacion();
+}
+
+function limpiarFormulario() {
+  ['f-nombre','f-descripcion','f-categoria','f-notas','f-etiquetas'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f-dificultad').value = '';
+  document.getElementById('f-tiempo-prep').value = '';
+  document.getElementById('f-tiempo-coccion').value = '';
+  document.getElementById('f-porciones').value = '';
+  document.getElementById('lista-ingredientes').innerHTML = '';
+  document.getElementById('lista-pasos').innerHTML = '';
+  agregarIngrediente(); agregarPaso();
+  quitarFoto(); quitarAudio();
+}
+
+function rellenarFormulario(r) {
+  document.getElementById('f-nombre').value = r.nombre || '';
+  document.getElementById('f-descripcion').value = r.descripcion || '';
+  document.getElementById('f-categoria').value = r.categoria || '';
+  document.getElementById('f-dificultad').value = r.dificultad || '';
+  document.getElementById('f-tiempo-prep').value = r.tiempo_prep || '';
+  document.getElementById('f-tiempo-coccion').value = r.tiempo_coccion || '';
+  document.getElementById('f-porciones').value = r.porciones || '';
+  document.getElementById('f-notas').value = r.notas || '';
+  document.getElementById('f-etiquetas').value = r.etiquetas || '';
+
+  // Foto
+  fotoActualPath = r.foto_path || '';
+  if (r.foto_path) {
+    const zona = document.getElementById('zona-foto');
+    zona.classList.add('tiene-foto');
+    zona.innerHTML = `
+      <img src="${r.foto_path.replace('uploads/', '/uploads/')}" alt="foto" />
+      <button class="btn-quitar-foto" onclick="event.stopPropagation(); quitarFoto()">✕</button>
+      <input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" style="display:none"/>
+    `;
+  } else { quitarFoto(); }
+
+  // Ingredientes
+  const listaI = document.getElementById('lista-ingredientes');
+  listaI.innerHTML = '';
+  let ingredientes = [];
+  try { ingredientes = JSON.parse(r.ingredientes || '[]'); } catch(e){}
+  if(ingredientes.length === 0) { agregarIngrediente(); }
+  else { ingredientes.forEach(i => agregarIngrediente(i)); }
+
+  // Pasos
+  const listaP = document.getElementById('lista-pasos');
+  listaP.innerHTML = '';
+  let pasos = [];
+  try { pasos = JSON.parse(r.pasos || '[]'); } catch(e){}
+  if(pasos.length === 0) { agregarPaso(); }
+  else { pasos.forEach(p => agregarPaso(p)); }
+
+  // Audio
+  audioActualPath = r.audio_path || '';
+  audioBlob = null; audioURL = null;
+  if (r.audio_path) {
+    const player = document.getElementById('audio-player-form');
+    player.classList.add('visible');
+    document.getElementById('audio-preview').src = r.audio_path.replace('uploads/', '/uploads/');
+  } else {
+    document.getElementById('audio-player-form').classList.remove('visible');
+    document.getElementById('audio-preview').src = '';
+  }
+}
+
+// Ingredientes
+function agregarIngrediente(valor = '') {
+  const lista = document.getElementById('lista-ingredientes');
+  const div = document.createElement('div');
+  div.className = 'item-editable';
+  div.innerHTML = `
+    <input type="text" placeholder="Ej: 3 huevos, 200g de harina…" value="${escapeHtml(valor)}" />
+    <button class="btn-rm" onclick="this.parentElement.remove()" title="Quitar">✕</button>
+  `;
+  lista.appendChild(div);
+}
+
+// Pasos
+function agregarPaso(valor = '') {
+  const lista = document.getElementById('lista-pasos');
+  const num = lista.children.length + 1;
+  const div = document.createElement('div');
+  div.className = 'item-editable';
+  div.innerHTML = `
+    <span class="num-paso">${num}</span>
+    <input type="text" placeholder="Paso ${num}: Describe la acción…" value="${escapeHtml(valor)}" />
+    <button class="btn-rm" onclick="eliminarPaso(this)" title="Quitar">✕</button>
+  `;
+  lista.appendChild(div);
+}
+
+function eliminarPaso(btn) {
+  btn.parentElement.remove();
+  // Renumerar
+  const items = document.querySelectorAll('#lista-pasos .item-editable');
+  items.forEach((item, idx) => {
+    item.querySelector('.num-paso').textContent = idx + 1;
+    item.querySelector('input').placeholder = `Paso ${idx + 1}: Describe la acción…`;
+  });
+}
+
+// Foto
+function cargarFoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    fotoBase64 = e.target.result;
+    fotoExt = file.name.split('.').pop().toLowerCase();
+    const zona = document.getElementById('zona-foto');
+    zona.classList.add('tiene-foto');
+    zona.innerHTML = `
+      <img src="${fotoBase64}" alt="foto preview" />
+      <button class="btn-quitar-foto" onclick="event.stopPropagation(); quitarFoto()">✕</button>
+      <input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" style="display:none"/>
+    `;
+  };
+  reader.readAsDataURL(file);
+}
+
+function quitarFoto() {
+  fotoBase64 = null; fotoExt = null; fotoActualPath = '';
+  const zona = document.getElementById('zona-foto');
+  zona.classList.remove('tiene-foto');
+  zona.innerHTML = `
+    <input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" />
+    <span class="foto-placeholder">🖼️</span>
+    <span class="foto-texto">Haz clic para elegir una foto</span>
+  `;
+}
+
+function quitarAudio() {
+  audioBlob = null; audioURL = null; audioActualPath = '';
+  document.getElementById('audio-player-form').classList.remove('visible');
+  const audio = document.getElementById('audio-preview');
+  if(audio) { audio.src = ''; }
+  document.getElementById('btn-grabar').textContent = '🎙 Grabar audio';
+  document.getElementById('btn-grabar').classList.remove('grabando');
+  document.getElementById('estado-grabacion').textContent = '';
+}
+
+// Audio – grabación
+async function toggleGrabacion() {
+  if (!grabando) {
+    iniciarGrabacion();
+  } else {
+    pararGrabacion();
+  }
+}
+
+async function iniciarGrabacion() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+    mediaRecorder.onstop = () => {
+      audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      audioURL = URL.createObjectURL(audioBlob);
+      const player = document.getElementById('audio-player-form');
+      player.classList.add('visible');
+      document.getElementById('audio-preview').src = audioURL;
+      document.getElementById('btn-grabar').textContent = '🎙 Grabar de nuevo';
+      document.getElementById('btn-grabar').classList.remove('grabando');
+      document.getElementById('estado-grabacion').textContent = '✅ Audio grabado';
+      stream.getTracks().forEach(t => t.stop());
+    };
+    mediaRecorder.start();
+    grabando = true;
+    document.getElementById('btn-grabar').textContent = '⏹ Detener';
+    document.getElementById('btn-grabar').classList.add('grabando');
+
+    // Contador de tiempo
+    let seg = 0;
+    const inter = setInterval(() => {
+      if (!grabando) { clearInterval(inter); return; }
+      seg++;
+      document.getElementById('estado-grabacion').textContent = `🔴 Grabando… ${seg}s`;
+    }, 1000);
+  } catch(e) {
+    mostrarToast('❌ No se pudo acceder al micrófono', 'error');
+  }
+}
+
+function pararGrabacion() {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+  }
+  grabando = false;
+}
+
+// Guardar receta
+async function guardarReceta() {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  if (!nombre) {
+    mostrarToast('⚠️ El nombre es obligatorio', 'error');
+    document.getElementById('f-nombre').focus();
+    return;
+  }
+
+  // Ingredientes
+  const ingredientes = [...document.querySelectorAll('#lista-ingredientes input')]
+    .map(i => i.value.trim()).filter(Boolean);
+
+  // Pasos
+  const pasos = [...document.querySelectorAll('#lista-pasos input')]
+    .map(i => i.value.trim()).filter(Boolean);
+
+  // Subir foto si hay nueva
+  let foto_path = fotoActualPath;
+  if (fotoBase64) {
+    try {
+      const res = await fetch(`${API}/upload/foto`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ data: fotoBase64, ext: fotoExt })
+      });
+      const json = await res.json();
+      foto_path = json.path;
+    } catch(e) { mostrarToast('⚠️ No se pudo subir la foto', 'error'); }
+  }
+
+  // Subir audio si hay nuevo
+  let audio_path = audioActualPath;
+  if (audioBlob && !audioURL?.startsWith('http')) {
+    try {
+      const reader = new FileReader();
+      const b64 = await new Promise((res) => {
+        reader.onload = (e) => res(e.target.result);
+        reader.readAsDataURL(audioBlob);
+      });
+      const resp = await fetch(`${API}/upload/audio`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ data: b64, ext: 'webm' })
+      });
+      const json = await resp.json();
+      audio_path = json.path;
+    } catch(e) { mostrarToast('⚠️ No se pudo guardar el audio', 'error'); }
+  }
+
+  const payload = {
+    usuario: usuarioActual,
+    nombre,
+    descripcion: document.getElementById('f-descripcion').value.trim(),
+    categoria: document.getElementById('f-categoria').value.trim(),
+    dificultad: document.getElementById('f-dificultad').value,
+    tiempo_prep: parseInt(document.getElementById('f-tiempo-prep').value) || 0,
+    tiempo_coccion: parseInt(document.getElementById('f-tiempo-coccion').value) || 0,
+    porciones: parseInt(document.getElementById('f-porciones').value) || 4,
+    ingredientes: JSON.stringify(ingredientes),
+    pasos: JSON.stringify(pasos),
+    notas: document.getElementById('f-notas').value.trim(),
+    etiquetas: document.getElementById('f-etiquetas').value.trim(),
+    foto_path,
+    audio_path,
+    favorito: 0
+  };
+
+  try {
+    if (recetaEditandoId) {
+      await fetch(`${API}/recetas/${recetaEditandoId}`, {
+        method: 'PUT',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      mostrarToast('✅ Receta actualizada', 'exito');
+    } else {
+      await fetch(`${API}/recetas`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      mostrarToast('✅ ¡Receta guardada!', 'exito');
+    }
+    cerrarModalForm();
+    cargarRecetas();
+    cargarCategorias();
+  } catch(e) {
+    mostrarToast('❌ Error al guardar', 'error');
+  }
+}
+
+// =======================
+// VER RECETA
+// =======================
+async function verReceta(id) {
+  recetaViendoId = id;
+  try {
+    const r = await fetch(`${API}/recetas/${id}`);
+    const rec = await r.json();
+    renderizarVer(rec);
+    document.getElementById('modal-ver').classList.add('abierto');
+  } catch(e) {
+    mostrarToast('❌ Error al cargar', 'error');
+  }
+}
+
+function renderizarVer(r) {
+  let ingredientes = [], pasos = [];
+  try { ingredientes = JSON.parse(r.ingredientes || '[]'); } catch(e){}
+  try { pasos = JSON.parse(r.pasos || '[]'); } catch(e){}
+
+  const total = (parseInt(r.tiempo_prep)||0) + (parseInt(r.tiempo_coccion)||0);
+  const fotoHtml = r.foto_path
+    ? `<img class="ver-foto-portada" src="${r.foto_path.replace('uploads/', '/uploads/')}" alt="foto" onerror="this.style.display='none'" />`
+    : `<div class="ver-foto-placeholder">${iconoCategoria(r.categoria)}</div>`;
+
+  const difClase = r.dificultad ? `dificultad-${r.dificultad.toLowerCase()}` : '';
+
+  const audioHtml = r.audio_path ? `
+    <div class="ver-seccion">
+      <div class="ver-seccion-titulo">🎙 Nota de voz</div>
+      <audio controls style="width:100%;border-radius:50px;" src="${r.audio_path.replace('uploads/', '/uploads/')}"></audio>
+    </div>` : '';
+
+  const notasHtml = r.notas ? `
+    <div class="ver-seccion">
+      <div class="ver-seccion-titulo">💡 Notas y trucos</div>
+      <div class="ver-notas">${escapeHtml(r.notas)}</div>
+    </div>` : '';
+
+  const etiquetasHtml = r.etiquetas ? `
+    <div class="ver-seccion">
+      <div class="ver-seccion-titulo">🏷 Etiquetas</div>
+      <div class="ver-etiquetas">
+        ${r.etiquetas.split(',').map(t => `<span class="etiqueta">${escapeHtml(t.trim())}</span>`).join('')}
+      </div>
+    </div>` : '';
+
+  document.getElementById('contenido-ver-receta').innerHTML = `
+    ${fotoHtml}
+    <div class="ver-header">
+      <div class="ver-categoria">${r.categoria || 'Sin categoría'}</div>
+      <h2 class="ver-nombre">${escapeHtml(r.nombre)}</h2>
+      ${r.descripcion ? `<p style="color:var(--texto-suave);margin-bottom:1rem;line-height:1.5;">${escapeHtml(r.descripcion)}</p>` : ''}
+      <div class="ver-chips">
+        ${r.dificultad ? `<span class="chip ${difClase}">🎯 ${r.dificultad}</span>` : ''}
+        ${r.tiempo_prep ? `<span class="chip">⚙️ Prep: ${r.tiempo_prep} min</span>` : ''}
+        ${r.tiempo_coccion ? `<span class="chip">🔥 Cocción: ${r.tiempo_coccion} min</span>` : ''}
+        ${total ? `<span class="chip">⏱ Total: ${total} min</span>` : ''}
+        ${r.porciones ? `<span class="chip">🍽 ${r.porciones} raciones</span>` : ''}
+      </div>
+    </div>
+    <div class="ver-body">
+      ${ingredientes.length ? `
+      <div class="ver-seccion">
+        <div class="ver-seccion-titulo">🛒 Ingredientes</div>
+        <ul class="lista-ingredientes">
+          ${ingredientes.map(i => `<li>${escapeHtml(i)}</li>`).join('')}
+        </ul>
+      </div>` : ''}
+      ${pasos.length ? `
+      <div class="ver-seccion">
+        <div class="ver-seccion-titulo">📋 Elaboración</div>
+        <ol class="lista-pasos">
+          ${pasos.map((p,i) => `
+            <li>
+              <span class="paso-num">${i+1}</span>
+              <span class="paso-texto">${escapeHtml(p)}</span>
+            </li>`).join('')}
+        </ol>
+      </div>` : ''}
+      ${audioHtml}
+      ${notasHtml}
+      ${etiquetasHtml}
+      <p style="font-size:0.75rem;color:var(--texto-suave);margin-top:2rem;text-align:right;">
+        Creada: ${formatFecha(r.fecha_creacion)} · Modificada: ${formatFecha(r.fecha_modificacion)}
+      </p>
+    </div>
+  `;
+}
+
+function cerrarModalVer() {
+  document.getElementById('modal-ver').classList.remove('abierto');
+  recetaViendoId = null;
+}
+
+function editarDesdeVer() {
+  cerrarModalVer();
+  if(recetaViendoId) abrirModalEditar(recetaViendoId);
+}
+
+// =======================
+// FAVORITOS
+// =======================
+async function toggleFav(id) {
+  try {
+    const r = await fetch(`${API}/favorito/${id}`, { method: 'POST' });
+    const json = await r.json();
+    mostrarToast(json.favorito ? '❤️ Añadida a favoritas' : '🤍 Quitada de favoritas', 'exito');
+    cargarRecetas();
+  } catch(e) {
+    mostrarToast('❌ Error', 'error');
+  }
+}
+
+// =======================
+// BORRAR RECETA
+// =======================
+function pedirBorrar(id) {
+  recetaBorrarId = id;
+  document.getElementById('dialogo-borrar').classList.add('abierto');
+}
+
+function cerrarDialogoBorrar() {
+  recetaBorrarId = null;
+  document.getElementById('dialogo-borrar').classList.remove('abierto');
+}
+
+async function confirmarBorrar() {
+  if (!recetaBorrarId) return;
+  try {
+    await fetch(`${API}/recetas/${recetaBorrarId}`, { method: 'DELETE' });
+    mostrarToast('🗑 Receta eliminada', 'exito');
+    cerrarDialogoBorrar();
+    cargarRecetas();
+    cargarCategorias();
+  } catch(e) {
+    mostrarToast('❌ Error al eliminar', 'error');
+  }
+}
+
+// =======================
+// UTILIDADES
+// =======================
+function mostrarToast(msg, tipo = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = tipo ? `visible ${tipo}` : 'visible';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => { t.className = ''; }, 3000);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function formatFecha(iso) {
+  if (!iso) return '—';
+  try {
+    return new Date(iso).toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' });
+  } catch(e) { return iso; }
+}
+
+// Cerrar modales con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('modal-form').classList.contains('abierto')) cerrarModalForm();
+    else if (document.getElementById('modal-ver').classList.contains('abierto')) cerrarModalVer();
+    else if (document.getElementById('dialogo-borrar').classList.contains('abierto')) cerrarDialogoBorrar();
+  }
+});
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('modal-form').addEventListener('click', function(e) {
+  if (e.target === this) cerrarModalForm();
+});
+document.getElementById('modal-ver').addEventListener('click', function(e) {
+  if (e.target === this) cerrarModalVer();
+});
+document.getElementById('dialogo-borrar').addEventListener('click', function(e) {
+  if (e.target === this) cerrarDialogoBorrar();
+});
+</script>
+</body>
+</html>
