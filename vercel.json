@@ -3,7 +3,8 @@
   "buildCommand": "npm install",
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/api/recetas/:id", "destination": "/api/recetas/[id]" },
+    { "source": "/api/favorito/:id", "destination": "/api/favorito/[id]" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
