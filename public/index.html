@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mis Recetas 🍳</title>
+  <title>Mis Recetas</title>
   <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
 </head>
 <body>
 
 <div id="pantalla-login">
   <div class="login-card">
-    <span class="login-icono">🍳</span>
+    <span class="icono login-icono material-symbols-outlined">restaurant_menu</span>
     <h1>Mis Recetas</h1>
     <p class="login-subtitulo">¿Quién va a cocinar hoy?</p>
     <div class="login-usuarios">
       <button class="btn-usuario juan" onclick="seleccionarUsuario('Juan')">
-        <span class="usuario-emoji">👨‍🍳</span>
+        <span class="icono material-symbols-outlined">person</span>
         <span class="usuario-nombre">Juan</span>
       </button>
       <button class="btn-usuario mama" onclick="seleccionarUsuario('Mama')">
-        <span class="usuario-emoji">👩‍🍳</span>
+        <span class="icono material-symbols-outlined">person</span>
         <span class="usuario-nombre">Mamá</span>
       </button>
     </div>
@@ -28,17 +29,17 @@
 
 <div id="app">
   <header>
-    <div class="header-logo">🍳 Mis Recetas</div>
+    <div class="header-logo"><span class="material-symbols-outlined icono">restaurant_menu</span> Mis Recetas</div>
     <div class="header-usuario">
-      <span id="header-emoji-usuario">👤</span>
+      <span id="header-emoji-usuario" class="material-symbols-outlined">person</span>
       <span id="header-nombre-usuario">Usuario</span>
     </div>
     <div class="header-buscador">
-      <span class="icono-busca">🔍</span>
+      <span class="icono-busca material-symbols-outlined">search</span>
       <input type="text" id="input-busqueda" placeholder="Buscar receta, ingrediente…" oninput="buscarRecetas()" />
     </div>
     <div class="header-acciones">
-      <button class="btn-nueva-receta" onclick="abrirModalNueva()">＋ Nueva receta</button>
+      <button class="btn-nueva-receta" onclick="abrirModalNueva()"><span class="material-symbols-outlined">add</span> Nueva receta</button>
       <button class="btn-salir" onclick="cerrarSesion()">Salir</button>
     </div>
   </header>
@@ -47,10 +48,10 @@
     <aside>
       <span class="sidebar-titulo">Mis recetas</span>
       <button class="sidebar-item activo" id="filtro-todas" onclick="aplicarFiltro('todas')">
-        <span class="icono">📋</span> Todas
+        <span class="icono material-symbols-outlined">menu_book</span> Todas
       </button>
       <button class="sidebar-item" id="filtro-favoritas" onclick="aplicarFiltro('favoritas')">
-        <span class="icono">❤️</span> Favoritas
+        <span class="icono material-symbols-outlined">favorite</span> Favoritas
       </button>
       <span class="sidebar-titulo" style="margin-top:1rem;">Categorías</span>
       <div id="sidebar-categorias"></div>
@@ -63,7 +64,7 @@
       </div>
       <div class="grid-recetas" id="grid-recetas">
         <div class="vacio">
-          <span class="vacio-emoji">🥘</span>
+          <span class="vacio-icon material-symbols-outlined">restaurant_menu</span>
           <h3>Aún no hay recetas</h3>
           <p>Pulsa "Nueva receta" para empezar tu libro de cocina</p>
         </div>
@@ -77,19 +78,19 @@
   <div class="modal">
     <div class="modal-header">
       <span class="modal-titulo" id="modal-form-titulo">Nueva Receta</span>
-      <button class="btn-cerrar-modal" onclick="cerrarModalForm()">✕</button>
+      <button class="btn-cerrar-modal" onclick="cerrarModalForm()"><span class="material-symbols-outlined">close</span></button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         <div class="form-grupo form-full">
-          <label>📸 Foto de la receta</label>
+          <label><span class="material-symbols-outlined">photo_camera</span> Foto de la receta</label>
           <div class="zona-foto" id="zona-foto" onclick="document.getElementById('input-foto').click()">
             <input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" />
-            <span class="foto-placeholder">🖼️</span>
+            <span class="foto-placeholder material-symbols-outlined">photo</span>
             <span class="foto-texto">Haz clic para elegir una foto</span>
           </div>
         </div>
-        <h3 class="seccion-titulo form-full">📝 Información básica</h3>
+        <h3 class="seccion-titulo form-full"><span class="material-symbols-outlined">article</span> Información básica</h3>
         <div class="form-grupo form-full">
           <label>Nombre de la receta *</label>
           <input type="text" id="f-nombre" placeholder="Ej: Tortilla española de Mamá" />
@@ -113,59 +114,59 @@
           <label>Dificultad</label>
           <select id="f-dificultad">
             <option value="">Selecciona…</option>
-            <option value="Fácil">🟢 Fácil</option>
-            <option value="Media">🟡 Media</option>
-            <option value="Difícil">🔴 Difícil</option>
+            <option value="Fácil">Fácil</option>
+            <option value="Media">Media</option>
+            <option value="Difícil">Difícil</option>
           </select>
         </div>
         <div class="form-grupo">
-          <label>⏱ Tiempo preparación (min)</label>
+          <label><span class="material-symbols-outlined">schedule</span> Tiempo preparación (min)</label>
           <input type="number" id="f-tiempo-prep" placeholder="15" min="0" />
         </div>
         <div class="form-grupo">
-          <label>🔥 Tiempo cocción (min)</label>
+          <label><span class="material-symbols-outlined">whatshot</span> Tiempo cocción (min)</label>
           <input type="number" id="f-tiempo-coccion" placeholder="30" min="0" />
         </div>
         <div class="form-grupo">
-          <label>🍽 Porciones / raciones</label>
+          <label><span class="material-symbols-outlined">restaurant</span> Porciones / raciones</label>
           <input type="number" id="f-porciones" placeholder="4" min="1" />
         </div>
-        <h3 class="seccion-titulo form-full">🛒 Ingredientes</h3>
+        <h3 class="seccion-titulo form-full"><span class="material-symbols-outlined">shopping_cart</span> Ingredientes</h3>
         <div class="form-grupo form-full">
           <div class="lista-editable" id="lista-ingredientes"></div>
-          <button class="btn-agregar" onclick="agregarIngrediente()">＋ Añadir ingrediente</button>
+          <button class="btn-agregar" onclick="agregarIngrediente()"><span class="material-symbols-outlined">add</span> Añadir ingrediente</button>
         </div>
-        <h3 class="seccion-titulo form-full">📋 Pasos de elaboración</h3>
+        <h3 class="seccion-titulo form-full"><span class="material-symbols-outlined">format_list_numbered</span> Pasos de elaboración</h3>
         <div class="form-grupo form-full">
           <div class="lista-editable" id="lista-pasos"></div>
-          <button class="btn-agregar" onclick="agregarPaso()">＋ Añadir paso</button>
+          <button class="btn-agregar" onclick="agregarPaso()"><span class="material-symbols-outlined">add</span> Añadir paso</button>
         </div>
-        <h3 class="seccion-titulo form-full">🎙 Notas de voz</h3>
+        <h3 class="seccion-titulo form-full"><span class="material-symbols-outlined">keyboard_voice</span> Notas de voz</h3>
         <div class="form-grupo form-full">
           <div class="zona-audio">
             <div class="audio-controles">
-              <button class="btn-audio btn-grabar" id="btn-grabar" onclick="toggleGrabacion()">🎙 Grabar audio</button>
+              <button class="btn-audio btn-grabar" id="btn-grabar" onclick="toggleGrabacion()"><span class="material-symbols-outlined">keyboard_voice</span> Grabar audio</button>
               <span class="estado-grabacion" id="estado-grabacion"></span>
             </div>
             <div class="audio-player" id="audio-player-form">
               <audio id="audio-preview" controls></audio>
-              <button class="btn-rm-audio" onclick="quitarAudio()">✕ Quitar audio</button>
+              <button class="btn-rm-audio" onclick="quitarAudio()"><span class="material-symbols-outlined">close</span> Quitar audio</button>
             </div>
           </div>
         </div>
-        <h3 class="seccion-titulo form-full">💡 Notas y trucos</h3>
+        <h3 class="seccion-titulo form-full"><span class="material-symbols-outlined">lightbulb</span> Notas y trucos</h3>
         <div class="form-grupo form-full">
           <textarea id="f-notas" placeholder="Consejos, variaciones, secretos de la receta…" rows="3"></textarea>
         </div>
         <div class="form-grupo form-full">
-          <label>🏷 Etiquetas (separadas por coma)</label>
+          <label><span class="material-symbols-outlined">label</span> Etiquetas (separadas por coma)</label>
           <input type="text" id="f-etiquetas" placeholder="Ej: sin gluten, verano, rápida…" />
         </div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="cerrarModalForm()">Cancelar</button>
-      <button class="btn-guardar" onclick="guardarReceta()">💾 Guardar receta</button>
+      <button class="btn-guardar" onclick="guardarReceta()"><span class="material-symbols-outlined">save</span> Guardar receta</button>
     </div>
   </div>
 </div>
@@ -176,8 +177,8 @@
     <div class="modal-header">
       <span class="modal-titulo">Receta</span>
       <div style="display:flex;gap:0.5rem;align-items:center;">
-        <button class="btn-mini edit" onclick="editarDesdeVer()" title="Editar">✏️</button>
-        <button class="btn-cerrar-modal" onclick="cerrarModalVer()">✕</button>
+        <button class="btn-mini edit" onclick="editarDesdeVer()" title="Editar"><span class="material-symbols-outlined">edit</span></button>
+        <button class="btn-cerrar-modal" onclick="cerrarModalVer()"><span class="material-symbols-outlined">close</span></button>
       </div>
     </div>
     <div id="contenido-ver-receta"></div>
@@ -187,7 +188,7 @@
 <!-- DIÁLOGO BORRAR -->
 <div class="modal-overlay" id="dialogo-borrar">
   <div class="dialogo-mini">
-    <div class="emoji">🗑️</div>
+    <div class="emoji material-symbols-outlined">delete</div>
     <h3>¿Borrar esta receta?</h3>
     <p>Esta acción no se puede deshacer.</p>
     <div class="dialogo-btns">
@@ -216,14 +217,14 @@ let fotoActualPath = '';
 let audioActualPath = '';
 let grabando = false;
 
-const API = '/api'; // ✅ Apunta a Vercel Functions
+const API = '/api'; // Apunta a Vercel Functions
 
 function seleccionarUsuario(nombre) {
   usuarioActual = nombre;
   document.getElementById('pantalla-login').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('header-nombre-usuario').textContent = nombre;
-  document.getElementById('header-emoji-usuario').textContent = nombre === 'Juan' ? '👨‍🍳' : '👩‍🍳';
+  document.getElementById('header-emoji-usuario').textContent = nombre === 'Juan' ? 'person' : 'person_outline';
   cargarRecetas();
   cargarCategorias();
 }
@@ -244,7 +245,7 @@ async function cargarRecetas(params = {}) {
     renderizarGrid(recetas);
     actualizarContador(recetas.length);
   } catch(e) {
-    mostrarToast('❌ No se pudo conectar con el servidor', 'error');
+    mostrarToast('No se pudo conectar con el servidor', 'error');
   }
 }
 
@@ -259,49 +260,43 @@ async function cargarCategorias() {
       btn.className = 'sidebar-item';
       btn.id = `filtro-cat-${cat}`;
       btn.onclick = () => aplicarFiltro('categoria', cat);
-      btn.innerHTML = `<span class="icono">${iconoCategoria(cat)}</span> ${cat}`;
+      btn.innerHTML = `<span class="icono material-symbols-outlined">restaurant</span> ${cat}`;
       sidebar.appendChild(btn);
     });
   } catch(e) {}
 }
 
 function iconoCategoria(cat) {
-  const mapa = {
-    'Desayuno':'🌅','Entrante':'🥗','Ensalada':'🥬','Sopa':'🍲',
-    'Verduras':'🥦','Pasta':'🍝','Arroz':'🍚','Carne':'🥩',
-    'Pescado':'🐟','Legumbres':'🫘','Postre':'🍮','Pan y Repostería':'🍞',
-    'Bebidas':'🥤','Tapas':'🫒'
-  };
-  return mapa[cat] || '🍽';
+  return 'restaurant';
 }
 
 function renderizarGrid(lista) {
   const grid = document.getElementById('grid-recetas');
   if (!lista || lista.length === 0) {
-    grid.innerHTML = `<div class="vacio"><span class="vacio-emoji">🥘</span><h3>Nada por aquí</h3><p>Prueba con otra búsqueda o crea una nueva receta</p></div>`;
+    grid.innerHTML = `<div class="vacio"><span class="vacio-icon material-symbols-outlined">restaurant_menu</span><h3>Nada por aquí</h3><p>Prueba con otra búsqueda o crea una nueva receta</p></div>`;
     return;
   }
   grid.innerHTML = lista.map(r => {
     const total = (parseInt(r.tiempo_prep)||0) + (parseInt(r.tiempo_coccion)||0);
     const fotoHtml = r.foto_path
       ? `<div class="tarjeta-foto"><img src="${r.foto_path}" alt="foto" loading="lazy"/></div>`
-      : `<div class="tarjeta-foto"><span>${iconoCategoria(r.categoria)}</span></div>`;
+      : `<div class="tarjeta-foto"><span class="material-symbols-outlined">restaurant</span></div>`;
     return `
     <div class="tarjeta-receta" onclick="verReceta(${r.id})">
       ${fotoHtml}
       <div class="tarjeta-acciones">
-        <button class="btn-mini fav ${r.favorito ? 'activo' : ''}" onclick="event.stopPropagation(); toggleFav(${r.id})">${r.favorito ? '❤️' : '🤍'}</button>
-        <button class="btn-mini edit" onclick="event.stopPropagation(); abrirModalEditar(${r.id})">✏️</button>
-        <button class="btn-mini del" onclick="event.stopPropagation(); pedirBorrar(${r.id})">🗑</button>
+        <button class="btn-mini fav ${r.favorito ? 'activo' : ''}" onclick="event.stopPropagation(); toggleFav(${r.id})"><span class="material-symbols-outlined">${r.favorito ? 'favorite' : 'favorite_border'}</span></button>
+        <button class="btn-mini edit" onclick="event.stopPropagation(); abrirModalEditar(${r.id})"><span class="material-symbols-outlined">edit</span></button>
+        <button class="btn-mini del" onclick="event.stopPropagation(); pedirBorrar(${r.id})"><span class="material-symbols-outlined">delete</span></button>
       </div>
       <div class="tarjeta-cuerpo">
         <div class="tarjeta-categoria">${r.categoria || 'Sin categoría'}</div>
         <div class="tarjeta-nombre">${r.nombre}</div>
         <div class="tarjeta-meta">
-          ${total ? `<span>⏱ ${total} min</span>` : ''}
-          ${r.porciones ? `<span>🍽 ${r.porciones}</span>` : ''}
-          ${r.dificultad ? `<span>${r.dificultad}</span>` : ''}
-          ${r.audio_path ? `<span>🎙 Audio</span>` : ''}
+          ${total ? `<span><span class="material-symbols-outlined">schedule</span> ${total} min</span>` : ''}
+          ${r.porciones ? `<span><span class="material-symbols-outlined">restaurant</span> ${r.porciones}</span>` : ''}
+          ${r.dificultad ? `<span><span class="material-symbols-outlined">insights</span> ${r.dificultad}</span>` : ''}
+          ${r.audio_path ? `<span><span class="material-symbols-outlined">keyboard_voice</span> Audio</span>` : ''}
         </div>
       </div>
     </div>`;
@@ -322,12 +317,12 @@ function aplicarFiltro(tipo, valor) {
   } else if (tipo === 'favoritas') {
     document.getElementById('filtro-favoritas').classList.add('activo');
     params.favorito = '1';
-    document.getElementById('titulo-seccion').textContent = '❤️ Favoritas';
+    document.getElementById('titulo-seccion').textContent = 'Favoritas';
   } else if (tipo === 'categoria') {
     const btn = document.getElementById(`filtro-cat-${valor}`);
     if(btn) btn.classList.add('activo');
     params.categoria = valor;
-    document.getElementById('titulo-seccion').textContent = `${iconoCategoria(valor)} ${valor}`;
+    document.getElementById('titulo-seccion').textContent = valor;
   }
   cargarRecetas(params);
 }
@@ -363,7 +358,7 @@ async function abrirModalEditar(id) {
     rellenarFormulario(rec);
     document.getElementById('modal-form-titulo').textContent = 'Editar Receta';
     document.getElementById('modal-form').classList.add('abierto');
-  } catch(e) { mostrarToast('❌ Error al cargar la receta', 'error'); }
+  } catch(e) { mostrarToast('Error al cargar la receta', 'error'); }
 }
 
 function cerrarModalForm() {
@@ -397,7 +392,7 @@ function rellenarFormulario(r) {
   if (r.foto_path) {
     const zona = document.getElementById('zona-foto');
     zona.classList.add('tiene-foto');
-    zona.innerHTML = `<img src="${r.foto_path}" alt="foto" /><button class="btn-quitar-foto" onclick="event.stopPropagation(); quitarFoto()">✕</button><input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" style="display:none"/>`;
+    zona.innerHTML = `<img src="${r.foto_path}" alt="foto" /><button class="btn-quitar-foto" onclick="event.stopPropagation(); quitarFoto()"><span class="material-symbols-outlined">close</span></button><input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" style="display:none"/>`;
   } else { quitarFoto(); }
   const listaI = document.getElementById('lista-ingredientes');
   listaI.innerHTML = '';
@@ -426,7 +421,7 @@ function agregarIngrediente(valor = '') {
   const lista = document.getElementById('lista-ingredientes');
   const div = document.createElement('div');
   div.className = 'item-editable';
-  div.innerHTML = `<input type="text" placeholder="Ej: 3 huevos, 200g de harina…" value="${escapeHtml(valor)}" /><button class="btn-rm" onclick="this.parentElement.remove()">✕</button>`;
+  div.innerHTML = `<input type="text" placeholder="Ej: 3 huevos, 200g de harina…" value="${escapeHtml(valor)}" /><button class="btn-rm" onclick="this.parentElement.remove()"><span class="material-symbols-outlined">close</span></button>`;
   lista.appendChild(div);
 }
 
@@ -435,7 +430,7 @@ function agregarPaso(valor = '') {
   const num = lista.children.length + 1;
   const div = document.createElement('div');
   div.className = 'item-editable';
-  div.innerHTML = `<span class="num-paso">${num}</span><input type="text" placeholder="Paso ${num}: Describe la acción…" value="${escapeHtml(valor)}" /><button class="btn-rm" onclick="eliminarPaso(this)">✕</button>`;
+  div.innerHTML = `<span class="num-paso">${num}</span><input type="text" placeholder="Paso ${num}: Describe la acción…" value="${escapeHtml(valor)}" /><button class="btn-rm" onclick="eliminarPaso(this)"><span class="material-symbols-outlined">close</span></button>`;
   lista.appendChild(div);
 }
 
@@ -456,7 +451,7 @@ function cargarFoto(event) {
     fotoExt = file.name.split('.').pop().toLowerCase();
     const zona = document.getElementById('zona-foto');
     zona.classList.add('tiene-foto');
-    zona.innerHTML = `<img src="${fotoBase64}" alt="foto preview" /><button class="btn-quitar-foto" onclick="event.stopPropagation(); quitarFoto()">✕</button><input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" style="display:none"/>`;
+    zona.innerHTML = `<img src="${fotoBase64}" alt="foto preview" /><button class="btn-quitar-foto" onclick="event.stopPropagation(); quitarFoto()"><span class="material-symbols-outlined">close</span></button><input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" style="display:none"/>`;
   };
   reader.readAsDataURL(file);
 }
@@ -465,14 +460,14 @@ function quitarFoto() {
   fotoBase64 = null; fotoExt = null; fotoActualPath = '';
   const zona = document.getElementById('zona-foto');
   zona.classList.remove('tiene-foto');
-  zona.innerHTML = `<input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" /><span class="foto-placeholder">🖼️</span><span class="foto-texto">Haz clic para elegir una foto</span>`;
+  zona.innerHTML = `<input type="file" id="input-foto" accept="image/*" onchange="cargarFoto(event)" /><span class="foto-placeholder material-symbols-outlined">photo</span><span class="foto-texto">Haz clic para elegir una foto</span>`;
 }
 
 function quitarAudio() {
   audioBlob = null; audioURL = null; audioActualPath = '';
   document.getElementById('audio-player-form').classList.remove('visible');
   document.getElementById('audio-preview').src = '';
-  document.getElementById('btn-grabar').textContent = '🎙 Grabar audio';
+  document.getElementById('btn-grabar').innerHTML = `<span class="material-symbols-outlined">keyboard_voice</span> Grabar audio`;
   document.getElementById('btn-grabar').classList.remove('grabando');
   document.getElementById('estado-grabacion').textContent = '';
 }
@@ -492,22 +487,22 @@ async function iniciarGrabacion() {
       audioURL = URL.createObjectURL(audioBlob);
       document.getElementById('audio-player-form').classList.add('visible');
       document.getElementById('audio-preview').src = audioURL;
-      document.getElementById('btn-grabar').textContent = '🎙 Grabar de nuevo';
+      document.getElementById('btn-grabar').innerHTML = `<span class="material-symbols-outlined">keyboard_voice</span> Grabar de nuevo`;
       document.getElementById('btn-grabar').classList.remove('grabando');
-      document.getElementById('estado-grabacion').textContent = '✅ Audio grabado';
+      document.getElementById('estado-grabacion').textContent = 'Audio grabado';
       stream.getTracks().forEach(t => t.stop());
     };
     mediaRecorder.start();
     grabando = true;
-    document.getElementById('btn-grabar').textContent = '⏹ Detener';
+    document.getElementById('btn-grabar').innerHTML = `<span class="material-symbols-outlined">stop</span> Detener`;
     document.getElementById('btn-grabar').classList.add('grabando');
     let seg = 0;
     const inter = setInterval(() => {
       if (!grabando) { clearInterval(inter); return; }
       seg++;
-      document.getElementById('estado-grabacion').textContent = `🔴 Grabando… ${seg}s`;
+      document.getElementById('estado-grabacion').textContent = `Grabando… ${seg}s`;
     }, 1000);
-  } catch(e) { mostrarToast('❌ No se pudo acceder al micrófono', 'error'); }
+  } catch(e) { mostrarToast('No se pudo acceder al micrófono', 'error'); }
 }
 
 function pararGrabacion() {
@@ -517,7 +512,7 @@ function pararGrabacion() {
 
 async function guardarReceta() {
   const nombre = document.getElementById('f-nombre').value.trim();
-  if (!nombre) { mostrarToast('⚠️ El nombre es obligatorio', 'error'); return; }
+  if (!nombre) { mostrarToast('El nombre es obligatorio', 'error'); return; }
 
   const ingredientes = [...document.querySelectorAll('#lista-ingredientes input')].map(i => i.value.trim()).filter(Boolean);
   const pasos = [...document.querySelectorAll('#lista-pasos input')].map(i => i.value.trim()).filter(Boolean);
@@ -556,13 +551,13 @@ if (audioBlob && !audioURL?.startsWith('http')) {
   try {
     if (recetaEditandoId) {
       await fetch(`${API}/recetas/${recetaEditandoId}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-      mostrarToast('✅ Receta actualizada', 'exito');
+      mostrarToast('Receta actualizada', 'exito');
     } else {
       await fetch(`${API}/recetas`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-      mostrarToast('✅ ¡Receta guardada!', 'exito');
+      mostrarToast('Receta guardada', 'exito');
     }
     cerrarModalForm(); cargarRecetas(); cargarCategorias();
-  } catch(e) { mostrarToast('❌ Error al guardar', 'error'); }
+  } catch(e) { mostrarToast('Error al guardar', 'error'); }
 }
 
 async function verReceta(id) {
@@ -571,7 +566,7 @@ async function verReceta(id) {
     const r = await fetch(`${API}/recetas/${id}`);
     renderizarVer(await r.json());
     document.getElementById('modal-ver').classList.add('abierto');
-  } catch(e) { mostrarToast('❌ Error al cargar', 'error'); }
+  } catch(e) { mostrarToast('Error al cargar', 'error'); }
 }
 
 function renderizarVer(r) {
@@ -579,7 +574,7 @@ function renderizarVer(r) {
   try { ingredientes = JSON.parse(r.ingredientes || '[]'); } catch(e){}
   try { pasos = JSON.parse(r.pasos || '[]'); } catch(e){}
   const total = (parseInt(r.tiempo_prep)||0) + (parseInt(r.tiempo_coccion)||0);
-  const fotoHtml = r.foto_path ? `<img class="ver-foto-portada" src="${r.foto_path}" alt="foto" onerror="this.style.display='none'" />` : `<div class="ver-foto-placeholder">${iconoCategoria(r.categoria)}</div>`;
+  const fotoHtml = r.foto_path ? `<img class="ver-foto-portada" src="${r.foto_path}" alt="foto" onerror="this.style.display='none'" />` : `<div class="ver-foto-placeholder"><span class="material-symbols-outlined">${iconoCategoria(r.categoria)}</span></div>`;
   document.getElementById('contenido-ver-receta').innerHTML = `
     ${fotoHtml}
     <div class="ver-header">
@@ -587,19 +582,19 @@ function renderizarVer(r) {
       <h2 class="ver-nombre">${escapeHtml(r.nombre)}</h2>
       ${r.descripcion ? `<p style="color:var(--texto-suave);margin-bottom:1rem;line-height:1.5;">${escapeHtml(r.descripcion)}</p>` : ''}
       <div class="ver-chips">
-        ${r.dificultad ? `<span class="chip">🎯 ${r.dificultad}</span>` : ''}
-        ${r.tiempo_prep ? `<span class="chip">⚙️ Prep: ${r.tiempo_prep} min</span>` : ''}
-        ${r.tiempo_coccion ? `<span class="chip">🔥 Cocción: ${r.tiempo_coccion} min</span>` : ''}
-        ${total ? `<span class="chip">⏱ Total: ${total} min</span>` : ''}
-        ${r.porciones ? `<span class="chip">🍽 ${r.porciones} raciones</span>` : ''}
+        ${r.dificultad ? `<span class="chip"><span class="material-symbols-outlined">insights</span> ${r.dificultad}</span>` : ''}
+        ${r.tiempo_prep ? `<span class="chip"><span class="material-symbols-outlined">schedule</span> Prep: ${r.tiempo_prep} min</span>` : ''}
+        ${r.tiempo_coccion ? `<span class="chip"><span class="material-symbols-outlined">whatshot</span> Cocción: ${r.tiempo_coccion} min</span>` : ''}
+        ${total ? `<span class="chip"><span class="material-symbols-outlined">timer</span> Total: ${total} min</span>` : ''}
+        ${r.porciones ? `<span class="chip"><span class="material-symbols-outlined">restaurant</span> ${r.porciones} raciones</span>` : ''}
       </div>
     </div>
     <div class="ver-body">
-      ${ingredientes.length ? `<div class="ver-seccion"><div class="ver-seccion-titulo">🛒 Ingredientes</div><ul class="lista-ingredientes">${ingredientes.map(i=>`<li>${escapeHtml(i)}</li>`).join('')}</ul></div>` : ''}
-      ${pasos.length ? `<div class="ver-seccion"><div class="ver-seccion-titulo">📋 Elaboración</div><ol class="lista-pasos">${pasos.map((p,i)=>`<li><span class="paso-num">${i+1}</span><span class="paso-texto">${escapeHtml(p)}</span></li>`).join('')}</ol></div>` : ''}
-      ${r.audio_path ? `<div class="ver-seccion"><div class="ver-seccion-titulo">🎙 Nota de voz</div><audio controls style="width:100%;border-radius:50px;" src="${r.audio_path}"></audio></div>` : ''}
-      ${r.notas ? `<div class="ver-seccion"><div class="ver-seccion-titulo">💡 Notas y trucos</div><div class="ver-notas">${escapeHtml(r.notas)}</div></div>` : ''}
-      ${r.etiquetas ? `<div class="ver-seccion"><div class="ver-seccion-titulo">🏷 Etiquetas</div><div class="ver-etiquetas">${r.etiquetas.split(',').map(t=>`<span class="etiqueta">${escapeHtml(t.trim())}</span>`).join('')}</div></div>` : ''}
+      ${ingredientes.length ? `<div class="ver-seccion"><div class="ver-seccion-titulo"><span class="material-symbols-outlined">shopping_cart</span> Ingredientes</div><ul class="lista-ingredientes">${ingredientes.map(i=>`<li>${escapeHtml(i)}</li>`).join('')}</ul></div>` : ''}
+      ${pasos.length ? `<div class="ver-seccion"><div class="ver-seccion-titulo"><span class="material-symbols-outlined">format_list_numbered</span> Elaboración</div><ol class="lista-pasos">${pasos.map((p,i)=>`<li><span class="paso-num">${i+1}</span><span class="paso-texto">${escapeHtml(p)}</span></li>`).join('')}</ol></div>` : ''}
+      ${r.audio_path ? `<div class="ver-seccion"><div class="ver-seccion-titulo"><span class="material-symbols-outlined">keyboard_voice</span> Nota de voz</div><audio controls style="width:100%;border-radius:50px;" src="${r.audio_path}"></audio></div>` : ''}
+      ${r.notas ? `<div class="ver-seccion"><div class="ver-seccion-titulo"><span class="material-symbols-outlined">lightbulb</span> Notas y trucos</div><div class="ver-notas">${escapeHtml(r.notas)}</div></div>` : ''}
+      ${r.etiquetas ? `<div class="ver-seccion"><div class="ver-seccion-titulo"><span class="material-symbols-outlined">label</span> Etiquetas</div><div class="ver-etiquetas">${r.etiquetas.split(',').map(t=>`<span class="etiqueta">${escapeHtml(t.trim())}</span>`).join('')}</div></div>` : ''}
       <p style="font-size:0.75rem;color:var(--texto-suave);margin-top:2rem;text-align:right;">Creada: ${formatFecha(r.fecha_creacion)} · Modificada: ${formatFecha(r.fecha_modificacion)}</p>
     </div>`;
 }
@@ -611,9 +606,9 @@ async function toggleFav(id) {
   try {
     const r = await fetch(`${API}/favorito/${id}`, { method: 'POST' });
     const json = await r.json();
-    mostrarToast(json.favorito ? '❤️ Añadida a favoritas' : '🤍 Quitada de favoritas', 'exito');
+    mostrarToast(json.favorito ? 'Añadida a favoritas' : 'Quitada de favoritas', 'exito');
     cargarRecetas();
-  } catch(e) { mostrarToast('❌ Error', 'error'); }
+  } catch(e) { mostrarToast('Error', 'error'); }
 }
 
 function pedirBorrar(id) { recetaBorrarId = id; document.getElementById('dialogo-borrar').classList.add('abierto'); }
@@ -623,9 +618,9 @@ async function confirmarBorrar() {
   if (!recetaBorrarId) return;
   try {
     await fetch(`${API}/recetas/${recetaBorrarId}`, { method: 'DELETE' });
-    mostrarToast('🗑 Receta eliminada', 'exito');
+    mostrarToast('Receta eliminada', 'exito');
     cerrarDialogoBorrar(); cargarRecetas(); cargarCategorias();
-  } catch(e) { mostrarToast('❌ Error al eliminar', 'error'); }
+  } catch(e) { mostrarToast('Error al eliminar', 'error'); }
 }
 
 function mostrarToast(msg, tipo = '') {
