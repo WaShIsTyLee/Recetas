@@ -523,22 +523,19 @@ async function guardarReceta() {
   const pasos = [...document.querySelectorAll('#lista-pasos input')].map(i => i.value.trim()).filter(Boolean);
 
   let foto_path = fotoActualPath;
-  if (fotoBase64) {
-    try {
-      const res = await fetch(`${API}/upload/foto`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ data: fotoBase64, ext: fotoExt }) });
-      foto_path = (await res.json()).path;
-    } catch(e) { mostrarToast('⚠️ No se pudo subir la foto', 'error'); }
-  }
+if (fotoBase64) {
+  foto_path = fotoBase64; // ← guarda el base64 directamente
+}
 
-  let audio_path = audioActualPath;
-  if (audioBlob && !audioURL?.startsWith('http')) {
-    try {
-      const reader = new FileReader();
-      const b64 = await new Promise(res => { reader.onload = e => res(e.target.result); reader.readAsDataURL(audioBlob); });
-      const resp = await fetch(`${API}/upload/audio`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ data: b64, ext: 'webm' }) });
-      audio_path = (await resp.json()).path;
-    } catch(e) { mostrarToast('⚠️ No se pudo guardar el audio', 'error'); }
-  }
+let audio_path = audioActualPath;
+if (audioBlob && !audioURL?.startsWith('http')) {
+  const reader = new FileReader();
+  const b64 = await new Promise(res => { 
+    reader.onload = e => res(e.target.result); 
+    reader.readAsDataURL(audioBlob); 
+  });
+  audio_path = b64; // ← guarda el base64 directamente
+}
 
   const payload = {
     usuario: usuarioActual,
