@@ -1,0 +1,14 @@
+{
+  "name": "mis-recetas",
+  "version": "1.0.0",
+  "description": "App de recetas personales",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
